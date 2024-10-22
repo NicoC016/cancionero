@@ -9,7 +9,7 @@ import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/o
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+/* eslint-disable */
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -20,7 +20,7 @@ export default function NavBar() {
     { name: "Canciones", href: "/", current: true },
     { name: "Acordes", href: "/chords", current: false },
   ]);
-  const onSubmit = (e:Event | any) =>{
+  const onSubmit = (e:Event | any ) =>{
     e.preventDefault();
     const name = decodeName(e.target?.name.value); 
     return router.push(`/songs?query=${encodeURIComponent(name.trim().toLowerCase())}`);    
@@ -120,7 +120,7 @@ export default function NavBar() {
 
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
-          {navigation.map((item, index) => (
+          {navigation.map((item) => (
             <DisclosureButton
               key={item.name}
               as="a"

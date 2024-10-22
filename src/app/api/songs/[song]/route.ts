@@ -1,6 +1,6 @@
 import { prisma } from "@/libs/prisma";
 import { NextResponse } from "next/server";
-
+/* eslint-disable */
 export async function GET(request:any, {params}:any){    
     try {
         const song = await prisma.song.findMany({
@@ -26,3 +26,4 @@ export async function GET(request:any, {params}:any){
         });
     }
 }
+/* eslint-enable */

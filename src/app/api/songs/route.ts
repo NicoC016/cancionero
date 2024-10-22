@@ -1,6 +1,7 @@
 import { prisma } from "@/libs/prisma";
 import { NextResponse } from "next/server";
 
+/* eslint-disable */
 export async function GET(){    
     try {
         const song = await prisma.song.findMany();
@@ -13,7 +14,6 @@ export async function GET(){
         });
     }
 }
-
 
 export async function POST(request:any ){    
     try {

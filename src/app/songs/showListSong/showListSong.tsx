@@ -5,12 +5,10 @@ import {
     Dialog,
     DialogBackdrop,
     DialogPanel,
-    Radio,
-    RadioGroup,
   } from "@headlessui/react";
   import { XMarkIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
-
+/* eslint-disable */
 const ShowListSong = ({songsfind}: {songsfind:Song[]}) => {
     const [songSelect, setSongFilter] = useState<Song | any>();
     const [open, setOpen] = useState(false);

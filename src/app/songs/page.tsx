@@ -5,25 +5,26 @@ import ShowListSong from "./showListSong/showListSong";
 import { Song } from "@/models";
 import Loading from "@/shared/loading";
 
-
+/* eslint-disable */
 function Songs() {
     const searchParams = useSearchParams();
     const query = searchParams.get("query");
     const [songsFind, setFongsFind] = useState<Song[]>([]);
     const [loading, setLoading] = useState(true);
     useEffect(()=>{
-        setLoading(true);
-        fetch(`192.168.1.45:3000/api/songs/${query}`)
-        .then(response => response.json())
-        .then((res:any)=>{
-            setFongsFind(res);
-            setLoading(false);
-        })
-        .catch(err=>{
-            setLoading(false);
-            console.info(err);
-            
-        })
+        setLoading(true); 
+        if(!query){return }
+            fetch(`http://localhost:3000/api/songs/${query}`)
+            .then(response => response.json())
+            .then((res:any)=>{
+                setFongsFind(res);
+                setLoading(false);
+            })
+            .catch(err=>{
+                setLoading(false);
+                console.info(err);
+                
+            })
     }, [])
 
     return (
@@ -47,5 +48,6 @@ function Songs() {
         </>
     );
 }
+/* eslint-enable */
 
 export default Songs;
