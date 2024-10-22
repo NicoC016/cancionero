@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #302f2f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #302f2f;
+    --foreground: #ededed;
+  }
+}
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animaciones específicas para los instrumentos */
+@keyframes strum {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes play {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes drum {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes sax {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-strum {
+  animation: strum 1s ease-in-out infinite;
+}
+
+.animate-play {
+  animation: play 1s ease-in-out infinite;
+}
+
+.animate-drum {
+  animation: drum 1s ease-in-out infinite;
+}
+
+.animate-sax {
+  animation: sax 1s ease-in-out infinite;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+.container-letter{
+  width: fit-content;
+}
+.chord {
+  font-weight: bold;
+  color: #007BFF;
+  vertical-align: top;
+  margin-right: 5px;
+}
+.line {
+  display: flex;
+  align-items: center;
+}
+.verse {
+  margin-bottom: 20px;
+}
+.line .lyrics {
+  margin-left: 10px;
+}
