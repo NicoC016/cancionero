@@ -5,7 +5,7 @@ const decodeName = (name: string) => {
 /* eslint-disable */
 async function Songs({ params }: {params:any}) {
   if(params.song == 'favicon.ico')return <small hidden></small>
-  const res = await fetch(`http://localhost:3000/api/songs/${params.song}`);
+  const res = await fetch(`https://cancionero-beryl.vercel.app/api/songs/${params.song}`);
   const song = await res.json();
   
   if(!song || song?.status === 'error'){

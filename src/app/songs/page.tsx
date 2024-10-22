@@ -14,7 +14,7 @@ function Songs() {
     useEffect(()=>{
         setLoading(true); 
         if(!query){return }
-            fetch(`http://localhost:3000/api/songs/${query}`)
+            fetch(`https://cancionero-beryl.vercel.app/api/songs/${query}`)
             .then(response => response.json())
             .then((res:any)=>{
                 setFongsFind(res);
