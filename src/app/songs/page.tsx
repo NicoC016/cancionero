@@ -12,9 +12,9 @@ function Songs() {
     const [songsFind, setFongsFind] = useState<Song[]>([]);
     const [loading, setLoading] = useState(true);
     useEffect(()=>{
-        setLoading(true); 
-        if(!query){return }
-            fetch(`https://cancionero-beryl.vercel.app/api/songs/${query}`)
+        setLoading(true);
+        if(!query){return}
+            fetch(`https://cancionero-sanpio.vercel.app/api/songs/${query}`)
             .then(response => response.json())
             .then((res:any)=>{
                 setFongsFind(res);
@@ -22,8 +22,6 @@ function Songs() {
             })
             .catch(err=>{
                 setLoading(false);
-                console.info(err);
-                
             })
     }, [])
 
