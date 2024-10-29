@@ -16,8 +16,8 @@ model Song {
   name  String
   letter String
   note String
-  interpreter String
-  capo String
-  description String
+  interpreter String?
+  capo String?
+  description String?
   createdAt DateTime @default(now())
 }

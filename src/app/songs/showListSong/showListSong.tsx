@@ -14,7 +14,7 @@ const ShowListSong = ({songsfind}: {songsfind:Song[]}) => {
     const [open, setOpen] = useState(false);
   return (
     <>
-        <div>
+        <div className="max-md:p-5 max-sm:p-1">
             <div className="w-full flex-col flex gap-2">
             {songsfind.length > 0 && (
                 songsfind.map((song: Song, index: number) => (
@@ -26,15 +26,17 @@ const ShowListSong = ({songsfind}: {songsfind:Song[]}) => {
                         setSongFilter(songsfind[index]);
                     }}
                 >
-                    <div className="flex justify-between items-center px-3.5 py-2 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg lg:aspect-none group-hover:bg-gray-800 lg:h-16">
+                    <div className="flex justify-between items-center lg:px-3.5 py-2 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg lg:aspect-none group-hover:bg-gray-800 lg:h-16">
                     <div>
-                        <span>{index + 1}- </span>
-                        <span className="capitalize">
+                        <span className="text-base max-sm:text-sm">{index + 1}- </span>
+                        <span className="capitalize text-base max-sm:text-sm">
                         {decodeName(song?.name)}
                         </span>
                     </div>
-                    <span>Tono: {song.note}</span>
+                    <div>
+                      <small className="font-thin">Tono: {song.note} - {song.description}</small>
                     </div>
+                  </div>
                 </div>
                 ))
             )}
@@ -55,8 +57,8 @@ const ShowListSong = ({songsfind}: {songsfind:Song[]}) => {
               transition
               className="flex w-full transform text-left text-base transition data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:my-8 md:max-w-2xl md:px-4 data-[closed]:md:translate-y-0 data-[closed]:md:scale-95 lg:max-w-4xl"
             >
-              <div className="relative flex w-full items-center overflow-hidden bg-gray-600 px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-md">
-                <div>
+              <div className="flex-col relative flex w-full items-center overflow-hidden bg-gray-600 px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-md">
+                <div className="h-16 w-full">
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
@@ -64,11 +66,20 @@ const ShowListSong = ({songsfind}: {songsfind:Song[]}) => {
                   >
                     <XMarkIcon aria-hidden="true" className="h-6 w-6" />
                   </button>
-                  <span className="absolute capitalize text-xl w-full right-0 text-center top-4 text-white mb-5">
-                    {decodeName(songSelect?.name)}
-                  </span>
+                  <div className="absolute capitalize text-xl w-full right-0 text-center top-4 text-white mb-5">
+                    <span>{decodeName(songSelect?.name)}</span>
+                    <br />
+                    <small>{decodeName(songSelect?.interpreter)}</small>
+                    <br />
+                    <span className="font-thin text-sm">{songSelect?.capo !== 'No'? `Capo:${songSelect?.capo}` : null}</span>
+                    <hr />
+                  </div>
                 </div>
-                <div className="w-full h-full flex justify-center mt-16"  dangerouslySetInnerHTML={{ __html: songSelect?.letter }}></div>
+                <div className="w-full h-full flex justify-center mb-8"  dangerouslySetInnerHTML={{ __html: songSelect?.letter }}></div>
+                <div className="border-t-2 absolute bottom-0 flex justify-between w-full left-0 p-3">
+                  <span>Tono: {songSelect?.note}</span>
+                  <span>{songSelect?.description} - {songSelect?.id}</span>
+                </div>
               </div>
             </DialogPanel>
           </div>

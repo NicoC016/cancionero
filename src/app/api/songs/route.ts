@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 /* eslint-disable */
 export async function GET(){    
     try {
-        const song = await prisma.song.findMany();
-        return NextResponse.json(song, { status: 200 });
+        const songSearch = await prisma.song.findMany();       
+        return NextResponse.json(songSearch);
     } catch (error:any) {
         return NextResponse.json({
             status:'error',
