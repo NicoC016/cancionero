@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <div>
       <h1 className="text-lg text-center mb-5 pt-3">Canciones:</h1>
-       <ShowListSong songsfind= {songsView}></ShowListSong>
+       <ShowListSong songsfind= {songsView} showSubtitle ={true}></ShowListSong>
     </div>
   );
 }
