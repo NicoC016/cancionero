@@ -71,7 +71,7 @@ const ShowListSong = ({songsfind}: {songsfind:Song[]}) => {
                     <br />
                     <small>{decodeName(songSelect?.interpreter)}</small>
                     <br />
-                    <span className="font-thin text-sm">{songSelect?.capo !== 'No'? `Capo:${songSelect?.capo}` : null}</span>
+                    <span className="font-thin text-sm">{songSelect?.capo !== 'No'? `Capo: ${songSelect?.capo}` : null}</span>
                     <hr />
                   </div>
                 </div>
