@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "../../styles/globals.css";
-import NavBar from "@shared/navbar";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {

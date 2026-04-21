@@ -20,5 +20,6 @@ model Song {
   structure Json?
   capo String?
   description String?
+  link String?
   createdAt DateTime @default(now())
 }

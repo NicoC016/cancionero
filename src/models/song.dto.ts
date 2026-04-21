@@ -5,7 +5,8 @@ export interface Song{
     note: string;
     interpreter: string;
     capo: string | null;
-    structure:{};
+    structure?:{} | undefined;
+    link?:string | undefined;
     description: string | undefined;
     createdAt: string;
 }
