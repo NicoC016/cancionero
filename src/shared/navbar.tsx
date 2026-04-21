@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MagnifyingGlassIcon, MusicalNoteIcon } from "@heroicons/react/24/outline"
 
 import { Input } from "./ui/input";
+import { EqualsIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 interface HeaderProps {
   searchQuery: string
@@ -46,8 +47,16 @@ export default function NavBar({ searchQuery, onSearchChange }: HeaderProps) {
                 placeholder="Buscar canción..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 bg-muted border-0 focus-visible:ring-primary"
+                className="pl-10 pr-12 bg-muted border-0 focus-visible:ring-primary"
               />
+              {searchQuery && (
+                <button
+                  onClick={() => onSearchChange("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
 

@@ -93,6 +93,5 @@ function Songs({songs}:HeaderProps) {
         </>
     );
 }
-/* eslint-enable */
 
 export default Songs;

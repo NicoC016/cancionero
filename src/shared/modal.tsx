@@ -1,12 +1,12 @@
 "use client"
-import { MusicalNoteIcon, UserIcon, BookOpenIcon, ClockIcon, ArrowsPointingOutIcon, ArrowsPointingInIcon } from "@heroicons/react/24/outline"
-import { PlayIcon, PauseIcon } from "@heroicons/react/24/solid"
-import { useState } from "react"
-import { Button } from "./ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog"
-import { decodeName } from "@/app/utils/song.helper"
-import { Song } from "@/models"
-
+import { MusicalNoteIcon, UserIcon, BookOpenIcon, ArrowsPointingOutIcon, ArrowsPointingInIcon } from "@heroicons/react/24/outline";
+import { PlayIcon, PauseIcon, XMarkIcon, ChevronDoubleLeftIcon } from "@heroicons/react/24/solid";
+import { useRef, useState } from "react";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { decodeName } from "@/app/utils/song.helper";
+import { Song } from "@/models";
+import ReactPlayer from "react-player";
 
 interface SongModalProps {
   song: Song | null
@@ -15,14 +15,34 @@ interface SongModalProps {
 }
 
 export function SongModal({ song, isOpen, onClose }: SongModalProps) {
-  const [showChords, setShowChords] = useState(true)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [fontSize, setFontSize] = useState<"normal" | "large">("normal")
+  const [showChords, setShowChords] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [fontSize, setFontSize] = useState<"normal" | "large">("normal");
+  const [showVideo, setShowVideo] = useState(false);
+   const [playerKey, setPlayerKey] = useState(0);
+
+
+  const play = () => {
+    setIsPlaying(!isPlaying);
+    setShowVideo(true);
+  };
+  const pause = () => {
+    setIsPlaying(!isPlaying)
+  };
+  const restart = () => {
+    debugger
+    setPlayerKey((prev) => prev + 1);
+  };
+
+  const closeVideo = () => {
+    setIsPlaying(false);
+    setShowVideo(false);
+  };
 
   if (!song) return null
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => {!open && onClose() && closeVideo()}}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" aria-description={song.name} aria-describedby={song.name}>
         <DialogHeader className="shrink-0 border-b border-border pb-4">
           <div className="flex items-start justify-between gap-4 pr-8">
@@ -55,24 +75,46 @@ export function SongModal({ song, isOpen, onClose }: SongModalProps) {
             </div>
           </div>
           <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border">
-            {/* <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsPlaying(!isPlaying)}
-              className="gap-2"
-            >
-              {isPlaying ? (
-                <>
-                  <PauseIcon className="w-4 h-4" />
-                  Pausar
-                </>
+            {
+              song?.link? (
+                  <div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {isPlaying? pause(): play()}}
+                      className="gap-2"
+                    >
+                      {isPlaying ? (
+                        <>
+                          <PauseIcon className="w-4 h-4" />
+                          Pausar
+                        </>
+                      ) : (
+                        <>
+                          <PlayIcon className="w-4 h-4" />
+                          Reproducir
+                        </>
+                      )}
+                    </Button>
+                    {isPlaying? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => restart()}
+                        className="gap-2 ml-2">
+                        <>
+                            <ChevronDoubleLeftIcon className="w-4 h-4" />
+                            Volver a empezar
+                          </>
+                      </Button>
+                    ):(
+                      <div></div>
+                    )}
+                  </div>
               ) : (
-                <>
-                  <PlayIcon className="w-4 h-4" />
-                  Reproducir
-                </>
-              )}
-            </Button> */}
+                <div></div>
+              )
+            }
             {/* <Button
               variant={showChords ? "default" : "outline"}
               size="sm"
@@ -100,6 +142,25 @@ export function SongModal({ song, isOpen, onClose }: SongModalProps) {
                 </>
               )}
             </Button>
+          </div>
+          <div>
+            {showVideo? (
+              <div>
+                <span className="w-4 h-4 absolute right-2 -mt-6.25">
+                  <XMarkIcon onClick={()=> closeVideo()}/>
+                </span>
+                <ReactPlayer
+                  key={playerKey}
+                  src={song.link}
+                  playing={isPlaying}
+                  controls={false}
+                  width="100"
+                  height="100"
+                />
+              </div>
+            ):(
+              <span></span>
+            )}
           </div>
         </DialogHeader>
 
