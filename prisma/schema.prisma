@@ -17,6 +17,7 @@ model Song {
   letter String
   note String
   interpreter String?
+  structure Json?
   capo String?
   description String?
   createdAt DateTime @default(now())

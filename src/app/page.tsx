@@ -1,14 +1,15 @@
-import ShowListSong from "./songs/showListSong/showListSong";
 import { orderSongs } from "./utils/song.helper";
+import { Song } from "@/models";
+import Songs from "./songs/page";
 
 export default async function Home() {
-  const res = await fetch(`https://cancionero-sanpio.vercel.app/api/songs`);
-  const songs = await res.json();
-  const songsView = orderSongs(songs);
-  return (
-    <div>
-      <h1 className="text-lg text-center mb-5 pt-3">Canciones:</h1>
-       <ShowListSong songsfind= {songsView} showSubtitle ={true}></ShowListSong>
-    </div>
-  );
+	const res = await fetch(`https://cancionero-sanpio.vercel.app/api/songs`);
+  	const songs = await res.json();
+  	const songsView:Song[] = orderSongs(songs);
+
+  	return (
+  	  	<div>
+			<Songs songs={songsView}></Songs>
+  	  	</div>
+  	);
 }

@@ -5,6 +5,7 @@ export interface Song{
     note: string;
     interpreter: string;
     capo: string | null;
-    description: string | null;
+    structure:{};
+    description: string | undefined;
     createdAt: string;
 }

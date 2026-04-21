@@ -1,10 +1,11 @@
 "use client";
-import { decodeName, subtitleOrder } from "@/app/utils/song.helper";
+import { decodeName, getIcon, subtitleOrder } from "@/app/utils/song.helper";
 import { Song } from "@/models";
-import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/16/solid";
+import Icons from "@/shared/getIcons";
+import { SongModal } from "@/shared/modal";
+import { MusicalNoteIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-/* eslint-disable */
+
 const ShowListSong = ({
   songsfind,
   showSubtitle = false,
@@ -16,7 +17,13 @@ const ShowListSong = ({
   const [open, setOpen] = useState(false);
   let globalIndex = 1;
 
-  const songsGroupedBySubtitle = songsfind.reduce((songList, song, index) => {
+
+  const handleSongClick = (song: Song) => {
+    setSongFilter(song)
+    setOpen(true)
+  }
+
+  const songsGroupedBySubtitle = songsfind.reduce((songList, song) => {
     const descriptionSong = song.description || "Otros";
     if (!songList[descriptionSong]) {
       songList[descriptionSong] = [];
@@ -28,97 +35,67 @@ const ShowListSong = ({
   return (
     <>
       <div className="max-md:p-5 max-sm:p-1">
-        <div className="w-full flex-col flex gap-2">
+        <div className="w-full flex-col flex gap-6">
           {subtitleOrder.map((subtitle) =>
-            songsGroupedBySubtitle[subtitle] ? (
-              <div key={subtitle}>
+            songsGroupedBySubtitle[subtitle.name] ? (
+              <div key={subtitle.name}>
                 {showSubtitle && (
-                  <h3 className="text-lg font-semibold mb-2 ml-2 capitalize">
-                    {subtitle}
-                  </h3>
-                )}
-                {songsGroupedBySubtitle[subtitle].map((song) => (
-                  <div
-                    className="group relative"
-                    key={song.id}
-                    onClick={() => {
-                      setOpen(true);
-                      setSongFilter(song);
-                    }}
-                  >
-                    <div className="flex justify-between items-center lg:px-3.5 py-2 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg lg:aspect-none group-hover:bg-gray-800 lg:h-16">
-                      <div>
-                        <span className="text-base max-sm:text-sm">
-                          {globalIndex ++}-{" "}
-                        </span>
-                        <span className="capitalize text-base max-sm:text-sm">
-                          {decodeName(song?.name)}
-                        </span>
+                  <section className="mb-8 headerScroll" id={subtitle.name.toLowerCase().replaceAll(' ', '_')}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <Icons icon={subtitle.icon} name={subtitle.name}/>
                       </div>
-                      <div>
-                        <small className="font-thin">
-                          Tono: {song.note} - {song.description}
-                        </small>
+                      <h2 className="font-serif text-2xl font-semibold text-foreground">{subtitle.name}</h2>
+                      <span className="text-sm text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                        {songsGroupedBySubtitle[subtitle.name].length} canciones
+                      </span>
+                    </div>
+                  </section>
+                )}
+                <div className="gap-2 w-full flex-col flex">
+                  {songsGroupedBySubtitle[subtitle.name].map((song) => (
+                    <div
+                      className="group relative gap-2"
+                      key={song.id}
+                      onClick={() => {
+                        setOpen(true);
+                        handleSongClick(song);
+                      }}
+                    >
+                      <div className="group relative bg-card rounded-xl p-4 border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div className="flex items-center gap-4">
+                          <div className="shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm">
+                            {globalIndex ++}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="capitalize font-medium text-card-foreground truncate group-hover:text-primary transition-colors">
+                              {decodeName(song?.name)}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">{subtitle.name}</p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-sm font-medium">
+                              <MusicalNoteIcon className="w-3.5 h-3.5" />
+                              {song.note}
+                            </span>
+                            {/* <button className="opacity-0 group-hover:opacity-100 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center transition-all hover:scale-110">
+                              <PlayIcon className="w-4 h-4 ml-0.5" />
+                            </button> */}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             ) : null
           )}
         </div>
-        <Dialog
-          open={open}
-          onClose={setOpen}
-          className="relative z-10 text-white"
-        >
-          <DialogBackdrop
-            transition
-            className="fixed inset-0 hidden bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:block"
-          />
-          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div className=" bg-gray-800 flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
-              <DialogPanel
-                transition
-                className="flex w-full transform text-left text-base transition data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:my-8 md:max-w-2xl md:px-4 data-[closed]:md:translate-y-0 data-[closed]:md:scale-95 lg:max-w-4xl"
-              >
-                <div className="flex-col relative flex w-full items-center overflow-hidden bg-gray-600 px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-md">
-                  <div className="h-20 w-full">
-                    <button
-                      type="button"
-                      onClick={() => setOpen(false)}
-                      className="z-10 absolute right-4 top-4 text-gray-400 hover:text-gray-500 mb-5"
-                    >
-                      <XMarkIcon aria-hidden="true" className="h-6 w-6" />
-                    </button>
-                    <div className="absolute capitalize text-xl w-full right-0 text-center top-4 text-white mb-5">
-                      <span>{decodeName(songSelect?.name)}</span>
-                      <br />
-                      <small>{decodeName(songSelect?.interpreter)}</small>
-                      <br />
-                      <span className="font-thin text-sm">
-                        {songSelect?.capo !== "No"
-                          ? `Capo: ${songSelect?.capo}`
-                          : null}
-                      </span>
-                      <hr />
-                    </div>
-                  </div>
-                  <div
-                    className="w-full h-full flex justify-center mb-8"
-                    dangerouslySetInnerHTML={{ __html: songSelect?.letter }}
-                  ></div>
-                  <div className="border-t-2 absolute bottom-0 flex justify-between w-full left-0 p-3">
-                    <span>Tono: {songSelect?.note}</span>
-                    <span>
-                      {songSelect?.description} - {songSelect?.id}
-                    </span>
-                  </div>
-                </div>
-              </DialogPanel>
-            </div>
-          </div>
-        </Dialog>
+        <SongModal
+          song={songSelect}
+          isOpen={open}
+          onClose={() => setOpen(false)}
+      />
       </div>
     </>
   );
