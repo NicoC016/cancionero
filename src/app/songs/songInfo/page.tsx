@@ -1,6 +1,6 @@
 "use client"
 
-import { decodeName, getLineChords, getLineText, getTypeStyles } from "@/app/utils/song.helper";
+import { getLineChords, getLineText, getTypeStyles } from "@/app/utils/song.helper";
 import { transposeChord } from "@/app/utils/transport-note";
 import { Song } from "@/models";
 

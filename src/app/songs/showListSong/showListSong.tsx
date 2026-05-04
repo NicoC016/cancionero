@@ -2,8 +2,8 @@
 import { decodeName, subtitleOrder } from "@/app/utils/song.helper";
 import { Song } from "@/models";
 import Icons from "@/shared/getIcons";
-import { SongModal } from "@/shared/modal";
 import { MusicalNoteIcon } from "@heroicons/react/24/outline";
+import { useRouter } from 'next/navigation';
 import { useState } from "react";
 
 const ShowListSong = ({
@@ -13,14 +13,12 @@ const ShowListSong = ({
   songsfind: Song[];
   showSubtitle?: boolean;
 }) => {
-    const [songSelect, setSongFilter] = useState<Song | any>();
-    const [open, setOpen] = useState(false);
+    const router = useRouter();
     let globalIndex = 1;
 
 
   	const handleSongClick = (song: Song) => {
-  	  	setSongFilter(song);
-  	  	setOpen(true);
+      return router.push(`/songs/details/${song.id}`);
   	}
 
   	const songsGroupedBySubtitle = songsfind.reduce((songList, song) => {
@@ -58,7 +56,6 @@ const ShowListSong = ({
                       className="group relative gap-2"
                       key={song.id}
                       onClick={() => {
-                        setOpen(true);
                         handleSongClick(song);
                       }}
                     >
@@ -88,11 +85,6 @@ const ShowListSong = ({
             ) : null
           )}
         </div>
-        <SongModal
-          song={songSelect}
-          isOpen={open}
-          onClose={() => setOpen(false)}
-      />
       </div>
     </>
   );

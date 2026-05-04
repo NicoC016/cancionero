@@ -1,8 +1,6 @@
-import { Song } from "./song.dto";
-
-
-export interface SongModalProps {
-    song: Song | null;
+export interface ModalProps {
+    children: any;
     isOpen: boolean;
+    title:string;
     onClose: () => void;
 }
