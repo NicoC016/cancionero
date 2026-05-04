@@ -7,7 +7,6 @@ import { Song } from "@/models";
 function SongsInfo({ song, showChords, transpose }: {song:Song, showChords:boolean, transpose: number}) {
   return (
     <div>
-      <h1 className="w-full text-center p-2 text-xl capitalize underline-offset-1">{decodeName(song?.name)}</h1>
       {song?.structure?.sections.map((section, i) => (
         <div className={`rounded-lg p-4 ${getTypeStyles(section.type)}`} key={i}>
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 block">
