@@ -2,7 +2,16 @@ import { Song } from "@/models";
 import { SparklesIcon, ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/solid'
 import { BodyOfCrist, BookCrossIcon, ChurchIcon, CrossBig, CrossIcon, CrownIcon, CupIcon, FishIcon, HeartCrossIcon, HolyGhostIcon, LambIcon, PrayingHandsIcon, TreeIcon, VirginIcon } from "../../../public/icons";
 
-
+export const getTypeStyles = (type: "verse" | "chorus" | "bridge" | "intro" | "outro") => {
+  switch (type) {
+    case "chorus":
+      return "bg-primary/5 border-l-4 border-primary"
+    case "bridge":
+      return "bg-accent/5 border-l-4 border-accent"
+    default:
+      return "bg-transparent"
+  }
+}
 
 export const decodeName = (name: string) => {
     const newName = name?.trim().replaceAll("-", " ");
@@ -54,4 +63,15 @@ const iconMap = {
 
 export function getIcon(name?: string) {
   return name ? iconMap[name as keyof typeof iconMap] : undefined
+}
+
+
+export function getLineText(line: any) {
+  return line.fragments.map((f: any) => f.text).join("")
+}
+
+export function getLineChords(line: Fragments) {
+  return line.fragments
+    .map((f: any) => f.chord)
+    .filter(Boolean)
 }

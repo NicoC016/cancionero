@@ -1,5 +1,5 @@
 "use client";
-import { decodeName, getIcon, subtitleOrder } from "@/app/utils/song.helper";
+import { decodeName, subtitleOrder } from "@/app/utils/song.helper";
 import { Song } from "@/models";
 import Icons from "@/shared/getIcons";
 import { SongModal } from "@/shared/modal";
@@ -13,24 +13,24 @@ const ShowListSong = ({
   songsfind: Song[];
   showSubtitle?: boolean;
 }) => {
-  const [songSelect, setSongFilter] = useState<Song | any>();
-  const [open, setOpen] = useState(false);
-  let globalIndex = 1;
+    const [songSelect, setSongFilter] = useState<Song | any>();
+    const [open, setOpen] = useState(false);
+    let globalIndex = 1;
 
 
-  const handleSongClick = (song: Song) => {
-    setSongFilter(song)
-    setOpen(true)
-  }
+  	const handleSongClick = (song: Song) => {
+  	  	setSongFilter(song);
+  	  	setOpen(true);
+  	}
 
-  const songsGroupedBySubtitle = songsfind.reduce((songList, song) => {
-    const descriptionSong = song.description || "Otros";
-    if (!songList[descriptionSong]) {
-      songList[descriptionSong] = [];
-    }
-    songList[descriptionSong].push(song);
-    return songList;
-  }, {} as { [key: string]: Song[] });
+  	const songsGroupedBySubtitle = songsfind.reduce((songList, song) => {
+  	  	const descriptionSong = song.description || "Otros";
+  	  	if (!songList[descriptionSong]) {
+  	  	  	songList[descriptionSong] = [];
+  	  	}
+  	  	songList[descriptionSong].push(song);
+  	  	return songList;
+  	}, {} as { [key: string]: Song[] });
 
   return (
     <>
@@ -78,9 +78,6 @@ const ShowListSong = ({
                               <MusicalNoteIcon className="w-3.5 h-3.5" />
                               {song.note}
                             </span>
-                            {/* <button className="opacity-0 group-hover:opacity-100 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center transition-all hover:scale-110">
-                              <PlayIcon className="w-4 h-4 ml-0.5" />
-                            </button> */}
                           </div>
                         </div>
                       </div>

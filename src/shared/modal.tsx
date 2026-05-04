@@ -1,48 +1,71 @@
 "use client"
 import { MusicalNoteIcon, UserIcon, BookOpenIcon, ArrowsPointingOutIcon, ArrowsPointingInIcon } from "@heroicons/react/24/outline";
-import { PlayIcon, PauseIcon, XMarkIcon, ChevronDoubleLeftIcon } from "@heroicons/react/24/solid";
-import { useRef, useState } from "react";
+import { PlayIcon, PauseIcon, XMarkIcon, ChevronDoubleLeftIcon, ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { decodeName } from "@/app/utils/song.helper";
-import { Song } from "@/models";
 import ReactPlayer from "react-player";
+import SongsInfo from "@/app/songs/[song]/page";
+import { SongModalProps } from "@/models/modal.dto";
+import { transposeChord } from "@/app/utils/transport-note";
 
-interface SongModalProps {
-  song: Song | null
-  isOpen: boolean
-  onClose: () => void
-}
+
 
 export function SongModal({ song, isOpen, onClose }: SongModalProps) {
-  const [showChords, setShowChords] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [fontSize, setFontSize] = useState<"normal" | "large">("normal");
-  const [showVideo, setShowVideo] = useState(false);
-   const [playerKey, setPlayerKey] = useState(0);
+    const [showChords, setShowChords] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [fontSize, setFontSize] = useState<"normal" | "large">("normal");
+    const [showVideo, setShowVideo] = useState(false);
+    const [playerKey, setPlayerKey] = useState(0);
+    const [transpose, setTranspose] = useState(0);
+    const [counterTranspose, setCounterTranspose] = useState(0);
 
 
-  const play = () => {
-    setIsPlaying(!isPlaying);
-    setShowVideo(true);
-  };
-  const pause = () => {
-    setIsPlaying(!isPlaying)
-  };
-  const restart = () => {
-    debugger
-    setPlayerKey((prev) => prev + 1);
-  };
+    const setValueTranspose = (type:string) => {
 
-  const closeVideo = () => {
-    setIsPlaying(false);
-    setShowVideo(false);
-  };
+        if(type === "suma"){
+            if(counterTranspose + 0.5 === 6 && type === "suma"){
+                setCounterTranspose(0);
+                return setTranspose(0);
+            }
+            setCounterTranspose(counterTranspose+ 0.5);
+            return setTranspose(transpose +1);
 
-  if (!song) return null
+        }
+        setCounterTranspose(counterTranspose- 0.5);
+        setTranspose(transpose -1);
+
+
+    }
+    
+    const play = () => {
+        setIsPlaying(!isPlaying);
+        setShowVideo(true);
+    };
+    const pause = () => {
+        setIsPlaying(!isPlaying)
+    };
+    const restart = () => {
+        setPlayerKey((prev) => prev + 1);
+    };
+
+    const closeVideo = () => {
+        setIsPlaying(false);
+        setShowVideo(false);
+    };
+
+    const closeModal = () =>{
+        closeVideo();
+        setTranspose(0);
+        setCounterTranspose(0)
+        onClose();
+    }
+
+    if (!song) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => {!open && onClose() && closeVideo()}}>
+    <Dialog open={isOpen} onOpenChange={(open) => {!open && closeModal()}}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" aria-description={song.name} aria-describedby={song.name}>
         <DialogHeader className="shrink-0 border-b border-border pb-4">
           <div className="flex items-start justify-between gap-4 pr-8">
@@ -53,7 +76,16 @@ export function SongModal({ song, isOpen, onClose }: SongModalProps) {
               <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-secondary-foreground font-medium">
                   <MusicalNoteIcon className="w-3.5 h-3.5" />
-                  Tono: {song.note}
+                  Tono: {transposeChord(song.note, transpose)}
+                  <section className="flex gap-2 justify-center items-center">
+                    <span role="button" className="flex justify-center items-center ml-5 p-0.5 border border-gray-700 rounded-full" onClick={()=> setValueTranspose("suma")}>
+                      <ArrowUpIcon className="w-3.5 h-3.5"/>
+                    </span>
+                    <span>{counterTranspose}</span>
+                    <span role="button" className="border border-gray-700 p-0.5 rounded-full" onClick={()=> setValueTranspose('resta')}>
+                      <ArrowDownIcon className="w-3.5 h-3.5"/>
+                    </span>
+                  </section>
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <BookOpenIcon className="w-4 h-4" />
@@ -71,13 +103,42 @@ export function SongModal({ song, isOpen, onClose }: SongModalProps) {
                     {song.capo}
                   </span>
                 )}
+                <div className="mt-3 flex gap-2">
+                  <Button
+                    variant={showChords ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setShowChords(!showChords)}
+                    className="gap-2"
+                  >
+                    <MusicalNoteIcon className="w-4 h-4" />
+                    Acordes
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFontSize(fontSize === "normal" ? "large" : "normal")}
+                    className="gap-2"
+                  >
+                    {fontSize === "normal" ? (
+                      <>
+                        <ArrowsPointingOutIcon className="w-4 h-4" />
+                        Agrandar
+                      </>
+                    ) : (
+                      <>
+                        <ArrowsPointingInIcon className="w-4 h-4" />
+                        Reducir
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border">
             {
               song?.link? (
-                  <div>
+                  <div className="flex">
                     <Button
                       variant="outline"
                       size="sm"
@@ -92,7 +153,7 @@ export function SongModal({ song, isOpen, onClose }: SongModalProps) {
                       ) : (
                         <>
                           <PlayIcon className="w-4 h-4" />
-                          Reproducir
+                          Escuchar
                         </>
                       )}
                     </Button>
@@ -115,33 +176,6 @@ export function SongModal({ song, isOpen, onClose }: SongModalProps) {
                 <div></div>
               )
             }
-            {/* <Button
-              variant={showChords ? "default" : "outline"}
-              size="sm"
-              onClick={() => setShowChords(!showChords)}
-              className="gap-2"
-            >
-              <MusicalNoteIcon className="w-4 h-4" />
-              Acordes
-            </Button> */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setFontSize(fontSize === "normal" ? "large" : "normal")}
-              className="gap-2"
-            >
-              {fontSize === "normal" ? (
-                <>
-                  <ArrowsPointingOutIcon className="w-4 h-4" />
-                  Agrandar
-                </>
-              ) : (
-                <>
-                  <ArrowsPointingInIcon className="w-4 h-4" />
-                  Reducir
-                </>
-              )}
-            </Button>
           </div>
           <div>
             {showVideo? (
@@ -166,13 +200,13 @@ export function SongModal({ song, isOpen, onClose }: SongModalProps) {
 
         <div className="flex-1 overflow-y-auto py-6 px-1">
           <div className={`space-y-6 ${fontSize === "large" ? "text-lg" : "text-base"}`}>
-            <section dangerouslySetInnerHTML={{ __html: song?.letter }}></section>
+            <SongsInfo song={song} showChords={showChords} transpose={transpose}/>
           </div>
         </div>
 
         <div className="shrink-0 border-t border-border pt-4 mt-auto">
           <p className="text-xs text-muted-foreground text-center">
-            Usa las flechas del teclado para navegar entre canciones
+            {song.id}
           </p>
         </div>
       </DialogContent>

@@ -26,8 +26,7 @@ const Loading = () => {
           img: "/images/bass.gif",
         },
       ];
-    
-  
+
       useEffect(() => {
         const interval = setInterval(() => {
           setInstrumentIndex((prevIndex:any) => (prevIndex + 1) % instruments.length);

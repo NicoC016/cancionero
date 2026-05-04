@@ -19,11 +19,11 @@ function Songs({songs}:HeaderProps) {
     	if (!searchQuery.trim()) return songs;
     	const query = searchQuery.toLowerCase()
     	return songs
-    	  .map((song) => ({
-    	    ...song,
-    	    data: song.name.toLowerCase().includes(query) || song.note.toLowerCase().includes(query)? Array(song): []
-    	  }))
-    	  .filter((songs) => songs?.data?.length > 0)
+    	  	.map((song) => ({
+    	    	...song,
+    	    	data: song.name.toLowerCase().includes(query) || song.note.toLowerCase().includes(query)? Array(song): []
+    	  	}))
+    	  	.filter((songs) => songs?.data?.length > 0)
   	}, [searchQuery]);
 
 	const navigateTo = (title:string):any =>{

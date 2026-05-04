@@ -1,5 +1,4 @@
-import * as cheerio from "cheerio"
-import { log } from "console"
+import * as cheerio from "cheerio";
 
 type Fragment = {
   text: string
@@ -24,13 +23,12 @@ export function parseSong(html: string): SongStructure {
   blocks.each((_, el) => {
     const chordEl = $(el)
 
-    // acordes
+
     const chords = chordEl
       .find("span.chord")
       .map((_, c) => $(c).text().trim())
       .get()
 
-    // el texto está en el sibling inmediato
     const text = chordEl
       .nextAll("div")
       .first()
@@ -49,4 +47,25 @@ export function parseSong(html: string): SongStructure {
   })
 
   return { lines }
+}
+
+export function migrateStructure(oldStructure: any) {
+  if (!oldStructure) return null;
+
+  // ya migrado → no tocar
+  if (oldStructure.sections) return oldStructure;
+
+  // formato viejo
+  if (oldStructure.lines) {
+    return {
+      sections: [
+        {
+          type: "verse",
+          lines: oldStructure.lines
+        }
+      ]
+    }
+  };
+
+  return null;
 }
