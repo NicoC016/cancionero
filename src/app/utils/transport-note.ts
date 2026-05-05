@@ -23,8 +23,30 @@ const ConvertionToAmericanEncryption:any = {
   si: "B"
 }
 
+const ConvertionToUnitedStateEncryption:any = {
+  c: "Do",
+  d: "Re",
+  e: "Mi",
+  f: "Fa",
+  g: "Sol",
+  a: "La",
+  b: "Si"
+}
+
 const checkIsIsNormalEncryption = (chord:string):string => {
   return ConvertionToAmericanEncryption[chord.toLowerCase()];
+}
+
+const changeEncryption = (chord:string):string => {
+  const splitterParam = getSplitterParams(chord);
+
+  if(chord.includes(splitterParam)){
+    const chordSeparate = chord.split(splitterParam);
+    const chordReturn = ConvertionToUnitedStateEncryption[chordSeparate[0].toLowerCase()].concat(splitterParam) ;
+    return chordReturn;
+  }
+  return ConvertionToUnitedStateEncryption[chord.toLowerCase()];
+
 }
 
 const getSplitterParams = (chord:string) => {
@@ -89,8 +111,8 @@ export function transposeChord(chord: string, steps: number): string {
 
     const preferFlats = useFlats(chord);
     const chordParsed = checkIsIsNormalEncryption(parsed.root)? checkIsIsNormalEncryption(parsed.root) : parsed.root;
-
     const newRoot = transposeNote(chordParsed, steps, preferFlats);
+    const newChord = checkIsIsNormalEncryption(newRoot)? newRoot: changeEncryption(newRoot);
 
-    return newRoot + (parsed.suffix);
+    return newChord + (parsed.suffix);
 }

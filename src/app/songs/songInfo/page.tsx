@@ -15,7 +15,7 @@ function SongsInfo({ song, showChords, transpose }: {song:Song, showChords:boole
           <div className="space-y-2">
             {section.lines.map((line, j) => (
               <div key={j} className="relative">
-                <div className="text-primary font-mono text-sm font-bold mb-0.5">
+                <div className="text-primary text-sm font-bold mb-0.5">
                   {showChords? (
                     transposeChord(getLineChords(line).join(" "), transpose)
                   ):(

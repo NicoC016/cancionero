@@ -15,7 +15,7 @@ export default function NavBar() {
 	const isDetailPage = pathname.startsWith("/songs/");
   	return (
     	<header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-    	  	<div className="max-w-4xl mx-auto px-4 py-4">
+    	  	<div className="max-w-6xl mx-auto px-4 py-4">
     	  	  	<div className="flex items-center justify-between gap-4">
     	  	  	  	<div className="flex items-center gap-3">
     	  	  	  	  	<div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
