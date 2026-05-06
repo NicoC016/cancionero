@@ -9,8 +9,8 @@ const FLAT_NOTES = [
 ];
 
 const splitterParam = [
-  "#", "7", "b", "9", "6", "sus",
-  "aug", "dis", 'm'
+  "#", 'm', "b", "9", "6", "sus",
+  "aug", "dis", "7"
 ];
 
 const ConvertionToAmericanEncryption:any = {
@@ -67,7 +67,7 @@ function parseChord(chord: string) {
   	  	const match = chord.split(splitterParam);
   	  	if (!match) return null;
 
-		const suffix = !match[1]? splitterParam: match[1];
+		const suffix = getSuffix(splitterParam, match, chord);
   	  	return {
   	  	  	root: match[0],
   	  	  	suffix: suffix || ""
@@ -77,6 +77,16 @@ function parseChord(chord: string) {
     	root: chord,
       	suffix: ""
   	};
+}
+
+const getSuffix = (splitterParam:string, match:string[], chord:string):string => {
+	if(match[1]){
+		if(chord.includes(splitterParam) && chord.includes(match[1])){
+			return splitterParam.concat(match[1]);
+		}
+		return match[1];
+	}
+	return splitterParam;
 }
 
 function transposeNote(note: string, steps: number, preferFlats: boolean) {
@@ -97,13 +107,16 @@ function transposeNote(note: string, steps: number, preferFlats: boolean) {
 export function transposeChord(chord: string, steps: number): string {
     if (!chord) return chord;
     if (chord.includes("/")) {
-        const [base, bass] = chord.split("/");
-
-        return (
-        	transposeChord(base.trim(), steps) +
-        	"/" +
-        	transposeChord(bass.trim(), steps)
-        );
+		const chordSplit = chord.split("/");
+		let chordSplitted = "";
+		chordSplit.forEach((res:string, index:number)=>{
+			chordSplitted = chordSplitted.concat(transposeChord(res.trim(), steps).concat('/'));
+			if(index === chordSplit.length-1 && chordSplitted.endsWith('/')){
+				chordSplitted = chordSplitted.slice(0, -1);
+			}
+			return;
+		});
+		return chordSplitted;
     }
 
     const parsed = parseChord(chord);
